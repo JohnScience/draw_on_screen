@@ -22,7 +22,6 @@ use windows::Win32::{
         CreateCompatibleDC,
         SRCCOPY,
         HBITMAP,
-        HDC, 
     },
     UI::WindowsAndMessaging::{
         // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagea
