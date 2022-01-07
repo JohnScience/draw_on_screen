@@ -4,11 +4,8 @@ use windows::Win32::{
     Foundation::{
         // https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror
         GetLastError,
-        HINSTANCE,
     },
     Graphics::Gdi::{
-        // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-createcompatiblebitmap
-        CreateCompatibleBitmap,
         // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-selectobject
         SelectObject,
         // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc
@@ -21,9 +18,11 @@ use windows::Win32::{
         DeleteDC,
         // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-deleteobject
         DeleteObject,
+        // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-createcompatibledc
+        CreateCompatibleDC,
         SRCCOPY,
         HBITMAP,
-        HDC, CreateCompatibleDC
+        HDC, 
     },
     UI::WindowsAndMessaging::{
         // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagea
@@ -60,6 +59,7 @@ fn main() {
         try_call_win_api!{
             let bmp: HBITMAP = LoadImageA(
                 None, // equivalent to NULL
+                // https://people.math.sc.edu/Burkardt/data/bmp/blackbuck.bmp
                 "C:\\Users\\demen\\Desktop\\blackbuck.bmp", // LoadImageA converts &str to PSTR
                 IMAGE_BITMAP,
                 0,
