@@ -32,6 +32,7 @@ use windows::Win32::{
         LR_DEFAULTSIZE,
     },
 };
+use std::env::current_dir;
 
 // Convenience macros
 
@@ -46,7 +47,8 @@ macro_rules! try_call_win_api {
         println!();
         $call
         let last_err = GetLastError();
-        println_val!(last_err);   
+        println_val!(last_err);
+        assert!(last_err == 0, "Windows API error");
     };
 }
 
@@ -54,12 +56,19 @@ macro_rules! try_call_win_api {
 // https://stackoverflow.com/questions/67765151/my-windows-rs-script-doesnt-render-bitmap-or-doesnt-create-one-but-doesnt-c
 // https://stackoverflow.com/questions/33669344/bitblt-captures-only-partial-screen
 fn main() {
+    let mut img_path = current_dir()
+        .expect("lacked permissions to get the current dir");
+    println!("Running from \"{}\"", img_path.as_os_str().to_string_lossy());
+    img_path.push("assets");
+    img_path.push("blackbuck.bmp");
+    let img_path = img_path.as_os_str().to_str().expect("non-UTF-8 file path");
+
     unsafe {
         try_call_win_api!{
             let bmp: HBITMAP = LoadImageA(
                 None, // equivalent to NULL
                 // https://people.math.sc.edu/Burkardt/data/bmp/blackbuck.bmp
-                "C:\\Users\\demen\\Desktop\\blackbuck.bmp", // LoadImageA converts &str to PSTR
+                img_path, // LoadImageA converts &str to PSTR
                 IMAGE_BITMAP,
                 0,
                 0,
